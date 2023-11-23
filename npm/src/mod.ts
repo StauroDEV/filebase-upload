@@ -224,7 +224,7 @@ const createBucket = async (
     .then((res) => res.status == 200)
 }
 
-export const createPresignedUrlWithoutClient = async (
+export const createPresignedUrl = async (
   { bucketName, apiUrl, file, token }: { bucketName: string; apiUrl: string; file: File; token: string },
 ) => {
   await createBucket({ bucketName, apiUrl, token })

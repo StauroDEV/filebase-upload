@@ -1,11 +1,11 @@
-import { createPresignedUrlWithoutClient } from './mod.ts'
+import { createPresignedUrl } from './mod.ts'
 import { load } from 'https://deno.land/std@0.207.0/dotenv/mod.ts'
 
 const env = await load()
 
 const file = new File(['Hello world'], 'hello.txt')
 
-const url = await createPresignedUrlWithoutClient({
+const url = await createPresignedUrl({
   bucketName: 'testing-example-1',
   token: env.FILEBASE_TOKEN,
   file,

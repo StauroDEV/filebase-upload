@@ -24,11 +24,11 @@ and save it to a `.env` file or somewhere else.
 ### Node.js
 
 ```ts
-import { createPresignedUrlWithoutClient } from '@stauro/filebase-upload'
+import { createPresignedUrl } from '@stauro/filebase-upload'
 
 const file = new File(['Hello world'], 'hello.txt')
 
-const url = await createPresignedUrlWithoutClient({
+const url = await createPresignedUrl({
   bucketName: 'testing-example-1',
   token: process.env.FILEBASE_TOKEN,
   file,
@@ -47,14 +47,14 @@ node --env-file=.env main.js
 ### Deno
 
 ```ts
-import { createPresignedUrlWithoutClient } from 'https://deno.land/x/filebase_upload/mod.ts'
+import { createPresignedUrl } from 'https://deno.land/x/filebase_upload/mod.ts'
 import { load } from 'https://deno.land/std@0.207.0/dotenv/mod.ts'
 
 const env = await load()
 
 const file = new File(['Hello world'], 'hello.txt')
 
-const url = await createPresignedUrlWithoutClient({
+const url = await createPresignedUrl({
   bucketName: 'testing-example-1',
   token: env.FILEBASE_TOKEN,
   file,
