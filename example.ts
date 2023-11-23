@@ -6,13 +6,15 @@ const env = await load()
 const file = new File(['Hello world'], 'hello.txt')
 
 const url = await createPresignedUrl({
-  bucketName: 'testing-example-1',
+  bucketName: `example-${crypto.randomUUID()}`,
   token: env.FILEBASE_TOKEN,
   file,
   apiUrl: 's3.filebase.com',
 })
 
-await fetch(decodeURIComponent(url), {
+const res = await fetch(decodeURIComponent(url), {
   method: 'PUT',
   body: file,
 })
+
+console.log(await res.text())

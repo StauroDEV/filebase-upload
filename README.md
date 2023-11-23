@@ -29,7 +29,7 @@ import { createPresignedUrl } from '@stauro/filebase-upload'
 const file = new File(['Hello world'], 'hello.txt')
 
 const url = await createPresignedUrl({
-  bucketName: 'testing-example-1',
+  bucketName: `example-${crypto.randomUUID()}`,
   token: process.env.FILEBASE_TOKEN,
   file,
   apiUrl: 's3.filebase.com',
@@ -55,7 +55,7 @@ const env = await load()
 const file = new File(['Hello world'], 'hello.txt')
 
 const url = await createPresignedUrl({
-  bucketName: 'testing-example-1',
+  bucketName: `example-${crypto.randomUUID()}`,
   token: env.FILEBASE_TOKEN,
   file,
   apiUrl: 's3.filebase.com',
