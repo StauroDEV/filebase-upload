@@ -1,6 +1,6 @@
 # filebase-upload
 
-Minimal library to upload files on Filebase S3 API. Partially based on
+Minimal library to upload files on [Filebase](https://filebase.com) S3 API. Partially based on
 [AWS SDK v3](https://github.com/aws/aws-sdk-js-v3).
 
 ## Install
