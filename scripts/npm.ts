@@ -8,9 +8,10 @@ await build({
   entryPoints: ['./mod.ts'],
   outDir: './npm',
   scriptModule: false,
-  shims: { deno: false },
+  shims: { deno: 'dev', weakRef: 'dev' },
+  test: true,
   compilerOptions: {
-    lib: ['DOM'],
+    lib: ['DOM', 'ES2021.String'],
     target: 'ES2022',
   },
   package: {
@@ -29,6 +30,7 @@ await build({
       '@types/node': 'latest',
       '@types/aws4': 'latest',
     },
+    files: ['esm'],
   },
   postBuild() {
     // steps to run after building and before running the tests

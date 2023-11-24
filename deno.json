@@ -3,5 +3,9 @@
     "semiColons": false,
     "singleQuote": true,
     "lineWidth": 120
+  },
+  "tasks": {
+    "npm:prepare": "deno run -A scripts/npm.ts && rm -rf npm/esm/deps npm/esm/*test*",
+    "npm:publish": "cd npm && pnpm publish && git push origin --tags"
   }
 }
