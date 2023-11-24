@@ -31,6 +31,9 @@ await build({
       '@types/aws4': 'latest',
     },
     files: ['esm'],
+    publishConfig: {
+      access: 'public',
+    },
   },
   postBuild() {
     // steps to run after building and before running the tests

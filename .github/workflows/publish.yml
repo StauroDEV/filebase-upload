@@ -5,6 +5,10 @@ on:
     tags:
         - '*'
 
+env:
+    FILEBASE_TOKEN: ${{ secrets.FILEBASE_TOKEN }}
+          
+
 jobs:
   test:
     runs-on: ubuntu-latest
