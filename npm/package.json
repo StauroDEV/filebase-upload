@@ -1,0 +1,40 @@
+{
+  "name": "@stauro/filebase-upload",
+  "description": "Minimal library to upload files on Filebase S3 API. Partially based on AWS SDK v3.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stauroDEV/filebase-upload.git"
+  },
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/stauroDEV/filebase-upload/issues"
+  },
+  "module": "./esm/mod.js",
+  "exports": {
+    ".": {
+      "import": "./esm/mod.js"
+    }
+  },
+  "scripts": {
+    "test": "node test_runner.js"
+  },
+  "files": [
+    "esm"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@aws-sdk/s3-request-presigner": "3.456.0",
+    "@smithy/types": "2.6.0",
+    "aws4": "1.12.0"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "picocolors": "^1.0.0",
+    "@deno/shim-deno": "~0.17.0",
+    "@deno/sham-weakref": "~0.1.0",
+    "@types/aws4": "latest"
+  },
+  "_generatedBy": "dnt@0.39.0"
+}
