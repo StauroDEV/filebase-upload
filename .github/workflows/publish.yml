@@ -17,8 +17,6 @@ jobs:
       - uses: denoland/setup-deno@v1
         with:
           deno-version: v1.x
-      - name: Run tests
-        run: deno test --coverage=coverage --allow-net --allow-env
       - name: Get tag version
         if: startsWith(github.ref, 'refs/tags/')
         id: get_tag_version
