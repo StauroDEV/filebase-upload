@@ -207,8 +207,14 @@ class HttpRequest {
   }
 }
 
+type RequiredArgs = {
+  bucketName: string
+  apiUrl: string
+  token: string
+}
+
 const createBucket = async (
-  { bucketName, apiUrl, token }: { bucketName: string; apiUrl: string; token: string },
+  { bucketName, apiUrl, token }: RequiredArgs,
 ) => {
   let requestOptions: aws4.Request = {
     host: `${bucketName}.${apiUrl}`,
@@ -243,11 +249,8 @@ export const createPresignedUrl = async (
 }
 
 export const headObject = async (
-  { bucketName, filename, apiUrl, token }: {
-    bucketName: string
+  { bucketName, filename, apiUrl, token }: RequiredArgs & {
     filename: string
-    apiUrl: string
-    token: string
   },
 ): Promise<[boolean, string | null]> => {
   let requestOptions: aws4.Request & { key?: string } = {
@@ -271,11 +274,8 @@ export const headObject = async (
 }
 
 export const getObject = async (
-  { bucketName, filename, apiUrl, token }: {
-    bucketName: string
+  { bucketName, filename, apiUrl, token }: RequiredArgs & {
     filename: string
-    apiUrl: string
-    token: string
   },
 ) => {
   let requestOptions: aws4.Request & { key?: string } = {
