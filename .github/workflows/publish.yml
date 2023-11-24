@@ -5,10 +5,6 @@ on:
     tags:
         - '*'
 
-env:
-    FILEBASE_TOKEN: ${{ secrets.FILEBASE_TOKEN }}
-          
-
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -31,6 +27,8 @@ jobs:
             registry-url: 'https://registry.npmjs.org'
       - name: npm build
         run: deno run -A ./scripts/npm.ts ${{steps.get_tag_version.outputs.TAG_VERSION}}
+        env:
+          FILEBASE_TOKEN: ${{ secrets.FILEBASE_TOKEN }}
       - name: npm publish
         if: startsWith(github.ref, 'refs/tags/')
         env:
