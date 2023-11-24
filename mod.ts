@@ -249,7 +249,7 @@ export const headObject = async (
     apiUrl: string
     token: string
   },
-) => {
+): Promise<[boolean, string | null]> => {
   let requestOptions: aws4.Request & { key?: string } = {
     host: `${bucketName}.${apiUrl}`,
     path: `/${filename}`,
@@ -267,5 +267,32 @@ export const headObject = async (
     `https://${requestOptions.host}${requestOptions.path}`,
     requestOptions as RequestInit,
   )
-    .then((res) => res.status == 200)
+    .then((res) => [res.status == 200, res.headers.get('x-amz-meta-cid')])
+}
+
+export const getObject = async (
+  { bucketName, filename, apiUrl, token }: {
+    bucketName: string
+    filename: string
+    apiUrl: string
+    token: string
+  },
+) => {
+  let requestOptions: aws4.Request & { key?: string } = {
+    host: `${bucketName}.${apiUrl}`,
+    path: `/${filename}`,
+    key: `/${filename}`,
+    region: 'us-east-1',
+    method: 'GET',
+    service: 's3',
+    headers: {},
+  }
+  requestOptions = generateFilebaseRequestOptions(
+    token,
+    requestOptions,
+  )
+  return await fetch(
+    `https://${requestOptions.host}${requestOptions.path}`,
+    requestOptions as RequestInit,
+  )
 }

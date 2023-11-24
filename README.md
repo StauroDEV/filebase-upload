@@ -69,3 +69,45 @@ And then run as:
 ```sh
 deno --allow-read --allow-net mod.ts
 ```
+
+## API
+
+### createPresignedUrl
+
+Creates a presigned URL for file upload. All options are required.
+
+### getObject
+
+Retrieves an object from Filebase S3 API and returns a response object.
+
+You can also retrieve the file CID from headers.
+
+```ts
+import { getObject } from 'https://deno.land/x/filebase_upload/mod.ts'
+
+const res = await getObject({
+  bucketName: `example-${crypto.randomUUID()}`,
+  token: env.FILEBASE_TOKEN,
+  apiUrl: 's3.filebase.com',
+  filename: 'hello.txt',
+})
+
+console.log(`${res.headers.get('x-amz-meta-cid')}:`, await res.text())
+```
+
+### headObject
+
+Checks if the file has been uploaded. Returns a boolean and a CID of the file (if uploaded).
+
+```ts
+import { headObject } from 'https://deno.land/x/filebase_upload/mod.ts'
+
+const [isUploaded, cid] = await headObject({
+  bucketName: `example-${crypto.randomUUID()}`,
+  token: env.FILEBASE_TOKEN,
+  apiUrl: 's3.filebase.com',
+  filename: 'hello.txt',
+})
+
+console.log(`is uploaded? ${isUploaded ? 'yes' : 'no'}`)
+```
