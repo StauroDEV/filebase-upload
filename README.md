@@ -1,6 +1,7 @@
 # filebase-upload
 
-[![GitHub Workflow Status][gh-actions-img]][github-actions] [![Codecov][cov-badge]][cov] [![][docs-badge]][docs]
+[![Version][v-badge-url]][npm-url] [![GitHub Workflow Status][gh-actions-img]][github-actions]
+[![Codecov][cov-badge]][cov] [![][docs-badge]][docs]
 
 Minimal library to upload files on [Filebase](https://filebase.com) S3 API. Partially based on
 [AWS SDK v3](https://github.com/aws/aws-sdk-js-v3).
@@ -120,3 +121,5 @@ console.log(`is uploaded? ${isUploaded ? 'yes' : 'no'}`)
 [github-actions]: https://github.com/staurodev/filebase-upload/actions
 [cov]: https://coveralls.io/github/StauroDEV/filebase-upload
 [cov-badge]: https://img.shields.io/coveralls/github/StauroDEV/filebase-upload?style=for-the-badge&color=FFAE00
+[v-badge-url]: https://img.shields.io/npm/v/stauro/filebase-upload?style=for-the-badge&logo=npm&label=&color=FFAE00
+[npm-url]: https://www.npmjs.com/package/@stauro/filebase-upload
