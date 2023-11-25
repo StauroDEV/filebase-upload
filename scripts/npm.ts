@@ -30,7 +30,6 @@ await build({
       '@types/node': 'latest',
       '@types/aws4': 'latest',
     },
-    files: ['esm'],
     publishConfig: {
       access: 'public',
     },
