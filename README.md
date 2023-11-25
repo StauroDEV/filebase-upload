@@ -116,7 +116,7 @@ console.log(`is uploaded? ${isUploaded ? 'yes' : 'no'}`)
 ```
 
 [docs-badge]: https://img.shields.io/github/v/release/staurodev/filebase-upload?label=Docs&logo=deno&style=for-the-badge&color=FFAE00
-[docs]: https://doc.deno.land/https/deno.land/x/gql/mod.ts
+[docs]: https://doc.deno.land/https/deno.land/x/filebase_upload/mod.ts
 [gh-actions-img]: https://img.shields.io/github/actions/workflow/status/staurodev/filebase-upload/ci.yml?branch=master&style=for-the-badge&logo=github&label=&color=FFAE00&
 [github-actions]: https://github.com/staurodev/filebase-upload/actions
 [cov]: https://coveralls.io/github/StauroDEV/filebase-upload
