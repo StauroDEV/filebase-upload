@@ -1,5 +1,4 @@
-import { describe, it } from 'https://deno.land/std@0.207.0/testing/bdd.ts'
-import { assertEquals } from 'https://deno.land/std@0.207.0/assert/mod.ts'
+import { assertEquals, assertStringIncludes, describe, it } from './dev_deps.ts'
 import { getObject } from './mod.ts'
 
 describe('getObject', () => {
@@ -8,9 +7,23 @@ describe('getObject', () => {
       bucketName: 'filebase-upload-tests',
       token: Deno.env.get('FILEBASE_TOKEN')!,
       filename: 'hello.txt',
-      apiUrl: 's3.filebase.com',
     })
     assertEquals(await res.text(), 'Hello world')
-    assertEquals(res.headers.get('x-amz-meta-cid'), 'QmNRCQWfgze6AbBCaT1rkrkV5tJ2aP4oTNPb5JZcXYywve')
+    assertEquals(
+      res.headers.get('x-amz-meta-cid'),
+      'QmNRCQWfgze6AbBCaT1rkrkV5tJ2aP4oTNPb5JZcXYywve',
+    )
+  })
+  it('should accept custom `apiUrl`', async () => {
+    try {
+      await getObject({
+        bucketName: 'filebase-upload-tests',
+        token: Deno.env.get('FILEBASE_TOKEN')!,
+        filename: 'hello.txt',
+        apiUrl: 'localhost:5000',
+      })
+    } catch (error) {
+      assertStringIncludes(error.message, 'https://filebase-upload-tests.localhost:5000/hello.txt')
+    }
   })
 })

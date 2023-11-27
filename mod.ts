@@ -1,3 +1,4 @@
+import { FILEBASE_API_URL } from './constants.ts'
 import {
   aws4,
   ChecksumConstructor,
@@ -79,10 +80,10 @@ class HttpRequest {
 }
 
 export const createPresignedUrl = async (
-  { bucketName, apiUrl, file, token }: { bucketName: string; apiUrl: string; file: File; token: string },
+  { bucketName, apiUrl, file, token }: { bucketName: string; apiUrl?: string; file: File; token: string },
 ) => {
   await createBucket({ bucketName, apiUrl, token })
-  const url = parseUrl(`https://${apiUrl}/${bucketName}/${file.name}`)
+  const url = parseUrl(`https://${apiUrl ?? FILEBASE_API_URL}/${bucketName}/${file.name}`)
   const presigner = new S3RequestPresigner({
     credentials: fromEnv(token),
     region: 'us-east-1',
@@ -102,7 +103,7 @@ export const headObject = async (
   },
 ): Promise<[boolean, string | null]> => {
   let requestOptions: aws4.Request & { key?: string } = {
-    host: `${bucketName}.${apiUrl}`,
+    host: `${bucketName}.${apiUrl ?? FILEBASE_API_URL}`,
     path: `/${filename}`,
     key: `/${filename}`,
     region: 'us-east-1',
@@ -127,7 +128,7 @@ export const getObject = async (
   },
 ) => {
   let requestOptions: aws4.Request & { key?: string } = {
-    host: `${bucketName}.${apiUrl}`,
+    host: `${bucketName}.${apiUrl ?? FILEBASE_API_URL}`,
     path: `/${filename}`,
     key: `/${filename}`,
     region: 'us-east-1',

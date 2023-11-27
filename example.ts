@@ -7,8 +7,7 @@ const file = new File(['Hello world'], 'hello.txt')
 
 const init = {
   bucketName: `filebase-upload-tests`,
-  token: env.FILEBASE_TOKEN,
-  apiUrl: 's3.filebase.com',
+  token: env.FILEBASE_TOKEN
 }
 
 const url = await createPresignedUrl({ ...init, file })
