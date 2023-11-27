@@ -20,10 +20,12 @@ describe('getObject', () => {
         bucketName: 'filebase-upload-tests',
         token: Deno.env.get('FILEBASE_TOKEN')!,
         filename: 'hello.txt',
-        apiUrl: 'localhost:5000',
+        apiUrl: 'stauro.dev',
       })
     } catch (error) {
-      assertStringIncludes(error.message, 'https://filebase-upload-tests.localhost:5000/hello.txt')
+      if (error.cause) {
+        assertStringIncludes(error.cause.hostname, 'filebase-upload-tests.stauro.dev')
+      } else assertStringIncludes(error.message, 'filebase-upload-tests.stauro.dev')
     }
   })
 })
