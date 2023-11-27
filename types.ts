@@ -1,5 +1,5 @@
 export type RequiredArgs = {
   bucketName: string
-  apiUrl: string
+  apiUrl?: string
   token: string
 }

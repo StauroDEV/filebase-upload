@@ -1,5 +1,4 @@
-import { describe, it } from 'https://deno.land/std@0.207.0/testing/bdd.ts'
-import { assertEquals, assertThrows } from 'https://deno.land/std@0.207.0/assert/mod.ts'
+import { assertEquals, assertThrows, describe, it } from './dev_deps.ts'
 import { parseUrl, toUint8Array } from './utils.ts'
 
 describe('parseUrl', () => {

@@ -1,3 +1,4 @@
+import { FILEBASE_API_URL } from './constants.ts'
 import { aws4, AwsCredentialIdentity, Buffer, IHttpRequest, QueryParameterBag } from './deps.ts'
 import { RequiredArgs } from './types.ts'
 
@@ -143,7 +144,7 @@ export const createBucket = async (
   { bucketName, apiUrl, token }: RequiredArgs,
 ) => {
   let requestOptions: aws4.Request = {
-    host: `${bucketName}.${apiUrl}`,
+    host: `${bucketName}.${apiUrl ?? FILEBASE_API_URL}`,
     region: 'us-east-1',
     method: 'PUT',
     service: 's3',

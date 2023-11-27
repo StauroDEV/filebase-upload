@@ -24,6 +24,8 @@ echo "accessKey:accessSecret" | base64
 
 and save it to a `.env` file or somewhere else.
 
+The default `apiUrl` is `s3.filebase.com`. To change, pass in the url to the `apiUrl` arg.
+
 ### Node.js
 
 ```ts
@@ -35,7 +37,6 @@ const url = await createPresignedUrl({
   bucketName: `example-${crypto.randomUUID()}`,
   token: process.env.FILEBASE_TOKEN,
   file,
-  apiUrl: 's3.filebase.com',
 })
 
 await fetch(decodeURIComponent(url), { method: 'PUT', body: file })
@@ -61,7 +62,6 @@ const url = await createPresignedUrl({
   bucketName: `example-${crypto.randomUUID()}`,
   token: env.FILEBASE_TOKEN,
   file,
-  apiUrl: 's3.filebase.com',
 })
 
 await fetch(decodeURIComponent(url), { method: 'PUT', body: file })
@@ -77,7 +77,7 @@ deno --allow-read --allow-net mod.ts
 
 ### createPresignedUrl
 
-Creates a presigned URL for file upload. All options are required.
+Creates a presigned URL for file upload. All options except apiUrl are required.
 
 ### getObject
 
@@ -91,7 +91,6 @@ import { getObject } from 'https://deno.land/x/filebase_upload/mod.ts'
 const res = await getObject({
   bucketName: `example-${crypto.randomUUID()}`,
   token: env.FILEBASE_TOKEN,
-  apiUrl: 's3.filebase.com',
   filename: 'hello.txt',
 })
 
@@ -108,7 +107,6 @@ import { headObject } from 'https://deno.land/x/filebase_upload/mod.ts'
 const [isUploaded, cid] = await headObject({
   bucketName: `example-${crypto.randomUUID()}`,
   token: env.FILEBASE_TOKEN,
-  apiUrl: 's3.filebase.com',
   filename: 'hello.txt',
 })
 
