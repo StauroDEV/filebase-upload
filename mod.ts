@@ -80,7 +80,13 @@ class HttpRequest {
 }
 
 export const createPresignedUrl = async (
-  { bucketName, apiUrl, file, token }: { bucketName: string; apiUrl?: string; file: File; token: string },
+  { bucketName, apiUrl, file, token, metadata }: {
+    bucketName: string
+    apiUrl?: string
+    file: File
+    token: string
+    metadata?: Record<string, string>
+  },
 ) => {
   await createBucket({ bucketName, apiUrl, token })
   const url = parseUrl(`https://${apiUrl ?? FILEBASE_API_URL}/${bucketName}/${file.name}`)
@@ -90,8 +96,10 @@ export const createPresignedUrl = async (
     sha256: HashImpl.bind(null, 'sha256') as unknown as ChecksumConstructor,
   })
 
+  const headers = metadata ? Object.fromEntries(Object.entries(metadata).map(([k, v]) => [`x-amz-meta-${k}`, v])) : {}
+
   const signedUrlObject = await presigner.presign(
-    new HttpRequest({ ...url, method: 'PUT', headers: {} }),
+    new HttpRequest({ ...url, method: 'PUT', headers }),
     { expiresIn: 3600 },
   )
   return formatUrl(signedUrlObject)
