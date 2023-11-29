@@ -1,5 +1,5 @@
 import { CAREncoderStream, createFileEncoderStream } from 'https://esm.sh/ipfs-car@1.0.0?pin=v133'
-import { CID } from 'https://esm.sh/multiformats@12.1.3/cid?pin=v133'
+import { CID } from 'https://esm.sh/multiformats@11.0.2/cid?pin=v133'
 import { assertEquals, assertStringIncludes, describe, it } from './dev_deps.ts'
 import { getObject, uploadCar } from './mod.ts'
 
