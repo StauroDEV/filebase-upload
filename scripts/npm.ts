@@ -8,8 +8,8 @@ await build({
   entryPoints: ['./mod.ts'],
   outDir: './npm',
   scriptModule: false,
-  shims: { deno: 'dev', weakRef: 'dev' },
-  test: true,
+  shims: { deno: false },
+  test: false,
   compilerOptions: {
     lib: ['DOM', 'ES2021.String'],
     target: 'ES2022',
