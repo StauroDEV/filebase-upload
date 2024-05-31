@@ -115,7 +115,7 @@ export const headObject = async (
   { bucketName, filename, apiUrl, token }: RequiredArgs & {
     filename: string
   },
-): Promise<[boolean, string | null]> => {
+): Promise<[boolean, string | null, string | null]> => {
   let requestOptions: aws4.Request & { key?: string } = {
     host: `${bucketName}.${apiUrl ?? FILEBASE_API_URL}`,
     path: `/${filename}`,
@@ -133,7 +133,7 @@ export const headObject = async (
     `https://${requestOptions.host}${requestOptions.path}`,
     requestOptions as RequestInit,
   )
-    .then((res) => [res.status == 200, res.headers.get('x-amz-meta-cid')])
+    .then((res) => [res.status == 200, res.headers.get('x-amz-meta-cid'), res.headers.get('content-length')])
 }
 
 export const getObject = async (
