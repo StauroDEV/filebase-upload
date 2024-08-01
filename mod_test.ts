@@ -3,7 +3,9 @@ import { CID } from 'https://esm.sh/multiformats@11.0.2/cid?pin=v133'
 import { assertEquals, assertStringIncludes, describe, it } from './dev_deps.ts'
 import { getObject, uploadCar } from './mod.ts'
 
-const placeholderCID = CID.parse('bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi')
+const placeholderCID = CID.parse(
+  'bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi',
+)
 
 describe('getObject', () => {
   it('should return a response of a file', async () => {
@@ -28,8 +30,13 @@ describe('getObject', () => {
       })
     } catch (error) {
       if (error.cause) {
-        assertStringIncludes(error.cause.hostname, 'filebase-upload-tests.stauro.dev')
-      } else assertStringIncludes(error.message, 'filebase-upload-tests.stauro.dev')
+        assertStringIncludes(
+          error.cause.hostname,
+          'filebase-upload-tests.stauro.dev',
+        )
+      } else {
+        assertStringIncludes(error.message, 'filebase-upload-tests.stauro.dev')
+      }
     }
   })
 })
@@ -49,27 +56,47 @@ async function streamToBlob(stream: ReadableStream): Promise<Blob> {
 }
 
 describe('uploadCar', () => {
-  it(
-    'should upload a CAR file and emit a CID from response headers',
-    async () => {
-      const stream = createFileEncoderStream(new Blob(['Hello ipfs-car!']))
-        .pipeThrough(
-          new TransformStream(),
-        )
-        .pipeThrough(new CAREncoderStream([placeholderCID]))
+  it('should upload a CAR file and emit a CID from response headers', async () => {
+    const stream = createFileEncoderStream(new Blob(['Hello ipfs-car!']))
+      .pipeThrough(new TransformStream())
+      .pipeThrough(new CAREncoderStream([placeholderCID]))
 
-      const blob = await streamToBlob(stream)
+    const blob = await streamToBlob(stream)
 
-      const file = new File([blob], 'file.car')
+    const file = new File([blob], 'file.car')
 
-      const res = await uploadCar({ bucketName: 'filebase-upload-tests', token: Deno.env.get('FILEBASE_TOKEN')!, file })
-      await res.body?.cancel()
-      const fetchResource = Object.keys(Deno.resources()).find((key) =>
-        Deno.resources()[parseInt(key)] === 'fetchResponse'
-      )
+    const res = await uploadCar({
+      bucketName: 'filebase-upload-tests',
+      token: Deno.env.get('FILEBASE_TOKEN')!,
+      file,
+    })
+    await res.body?.cancel()
+    const fetchResource = Object.keys(Deno.resources()).find(
+      (key) => Deno.resources()[parseInt(key)] === 'fetchResponse',
+    )
 
-      assertEquals(res.headers.get('x-amz-meta-cid'), 'bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi')
-      Deno.close(parseInt(fetchResource!)) // weird response
-    },
-  )
+    assertEquals(
+      res.headers.get('x-amz-meta-cid'),
+      'bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi',
+    )
+    Deno.close(parseInt(fetchResource!)) // weird response
+  })
+})
+describe('uploadFile', () => {
+  it('should upload a file', async () => {
+    const file = new File([new Blob(['Hello world!'])], 'file.txt')
+
+    const res = await uploadCar({
+      bucketName: 'filebase-upload-tests',
+      token: Deno.env.get('FILEBASE_TOKEN')!,
+      file,
+    })
+    await res.body?.cancel()
+    const fetchResource = Object.keys(Deno.resources()).find(
+      (key) => Deno.resources()[parseInt(key)] === 'fetchResponse',
+    )
+
+    assertEquals(res.status, 200)
+    Deno.close(parseInt(fetchResource!)) // weird response
+  })
 })

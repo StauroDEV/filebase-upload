@@ -72,20 +72,25 @@ class HttpRequest {
     this.protocol = options.protocol
       ? options.protocol.slice(-1) !== ':' ? `${options.protocol}:` : options.protocol
       : 'https:'
-    this.path = options.path ? (options.path.charAt(0) !== '/' ? `/${options.path}` : options.path) : '/'
+    this.path = options.path ? options.path.charAt(0) !== '/' ? `/${options.path}` : options.path : '/'
     this.username = options.username
     this.password = options.password
     this.fragment = options.fragment
   }
 }
 
-export const createPresignedUrl = async (
-  { bucketName, apiUrl, file, token }: {
-    file: File
-  } & RequiredArgs,
-) => {
+export const createPresignedUrl = async ({
+  bucketName,
+  apiUrl,
+  file,
+  token,
+}: {
+  file: File
+} & RequiredArgs) => {
   await createBucket({ bucketName, apiUrl, token })
-  const url = parseUrl(`https://${apiUrl ?? FILEBASE_API_URL}/${bucketName}/${file.name}`)
+  const url = parseUrl(
+    `https://${apiUrl ?? FILEBASE_API_URL}/${bucketName}/${file.name}`,
+  )
   const presigner = new S3RequestPresigner({
     credentials: fromEnv(token),
     region: 'us-east-1',
@@ -99,23 +104,27 @@ export const createPresignedUrl = async (
   return formatUrl(signedUrlObject)
 }
 
-export const uploadCar = async ({ file, ...args }: RequiredArgs & { file: File }) => {
+export const uploadCar = async ({
+  file,
+  ...args
+}: RequiredArgs & { file: File }) => {
   const url = await createPresignedUrl({ ...args, file })
 
-  const res = await fetch(decodeURIComponent(url), {
+  return fetch(decodeURIComponent(url), {
     method: 'PUT',
     body: file,
     headers: { 'x-amz-meta-import': 'car' },
   })
-
-  return res
 }
 
-export const headObject = async (
-  { bucketName, filename, apiUrl, token }: RequiredArgs & {
-    filename: string
-  },
-): Promise<[boolean, string | null, string | null]> => {
+export const headObject = async ({
+  bucketName,
+  filename,
+  apiUrl,
+  token,
+}: RequiredArgs & {
+  filename: string
+}): Promise<[boolean, string | null, string | null]> => {
   let requestOptions: aws4.Request & { key?: string } = {
     host: `${bucketName}.${apiUrl ?? FILEBASE_API_URL}`,
     path: `/${filename}`,
@@ -125,22 +134,25 @@ export const headObject = async (
     service: 's3',
     headers: {},
   }
-  requestOptions = generateFilebaseRequestOptions(
-    token,
-    requestOptions,
-  )
-  return await fetch(
+  requestOptions = generateFilebaseRequestOptions(token, requestOptions)
+  return  fetch(
     `https://${requestOptions.host}${requestOptions.path}`,
     requestOptions as RequestInit,
-  )
-    .then((res) => [res.status == 200, res.headers.get('x-amz-meta-cid'), res.headers.get('content-length')])
+  ).then((res) => [
+    res.status == 200,
+    res.headers.get('x-amz-meta-cid'),
+    res.headers.get('content-length'),
+  ])
 }
 
-export const getObject = async (
-  { bucketName, filename, apiUrl, token }: RequiredArgs & {
-    filename: string
-  },
-) => {
+export const getObject = async ({
+  bucketName,
+  filename,
+  apiUrl,
+  token,
+}: RequiredArgs & {
+  filename: string
+}) => {
   let requestOptions: aws4.Request & { key?: string } = {
     host: `${bucketName}.${apiUrl ?? FILEBASE_API_URL}`,
     path: `/${filename}`,
@@ -150,12 +162,20 @@ export const getObject = async (
     service: 's3',
     headers: {},
   }
-  requestOptions = generateFilebaseRequestOptions(
-    token,
-    requestOptions,
-  )
-  return await fetch(
+  requestOptions = generateFilebaseRequestOptions(token, requestOptions)
+  return  fetch(
     `https://${requestOptions.host}${requestOptions.path}`,
     requestOptions as RequestInit,
   )
+}
+
+export const uploadFile = async ({
+  file,
+  ...args
+}: RequiredArgs & { file: File }) => {
+  const url = await createPresignedUrl({ ...args, file })
+  return fetch(decodeURIComponent(url), {
+    method: 'PUT',
+    body: file,
+  })
 }
