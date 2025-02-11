@@ -1,16 +1,9 @@
 import { FILEBASE_API_URL } from './constants.ts'
-import {
-  aws4,
-  ChecksumConstructor,
-  createHash,
-  createHmac,
-  HeaderBag,
-  Hmac,
-  IHttpRequest,
-  NodeHash,
-  QueryParameterBag,
-  S3RequestPresigner,
-} from './deps.ts'
+import type { ChecksumConstructor, HeaderBag, HttpRequest as IHttpRequest, QueryParameterBag } from 'npm:@smithy/types'
+
+import aws4 from 'npm:aws4'
+import { createHash, createHmac, Hash as NodeHash, type Hmac } from 'node:crypto'
+import { S3RequestPresigner } from 'npm:@aws-sdk/s3-request-presigner'
 import { RequiredArgs } from './types.ts'
 
 import {
@@ -87,7 +80,7 @@ export const createPresignedUrl = async (
   await createBucket({ bucketName, apiUrl, token })
   const url = parseUrl(`https://${apiUrl ?? FILEBASE_API_URL}/${bucketName}/${file.name}`)
   const presigner = new S3RequestPresigner({
-    credentials: fromEnv(token),
+    credentials: fromEnv(token)(),
     region: 'us-east-1',
     sha256: HashImpl.bind(null, 'sha256') as unknown as ChecksumConstructor,
   })

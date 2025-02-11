@@ -1,7 +1,7 @@
 import { uploadCar } from './mod.ts'
-import { load } from 'https://deno.land/std@0.207.0/dotenv/mod.ts'
-import { CAREncoderStream, createFileEncoderStream } from 'https://esm.sh/ipfs-car@1.0.0'
-import { CID } from 'https://esm.sh/multiformats@12.1.3/cid'
+import { load } from '@std/dotenv'
+import { CAREncoderStream, createFileEncoderStream } from 'npm:ipfs-car'
+import { CID } from 'npm:multiformats'
 
 const env = await load()
 
