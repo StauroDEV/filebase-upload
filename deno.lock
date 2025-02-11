@@ -9,10 +9,14 @@
     "jsr:@std/assert@^1.0.10": "1.0.11",
     "jsr:@std/assert@^1.0.11": "1.0.11",
     "jsr:@std/bytes@0.223": "0.223.0",
+    "jsr:@std/bytes@^1.0.5": "1.0.5",
+    "jsr:@std/data-structures@^1.0.6": "1.0.6",
+    "jsr:@std/dotenv@~0.225.3": "0.225.3",
     "jsr:@std/fmt@0.223": "0.223.0",
     "jsr:@std/fmt@1": "1.0.5",
     "jsr:@std/fs@0.223": "0.223.0",
     "jsr:@std/fs@1": "1.0.11",
+    "jsr:@std/fs@^1.0.9": "1.0.11",
     "jsr:@std/fs@~0.229.3": "0.229.3",
     "jsr:@std/internal@^1.0.5": "1.0.5",
     "jsr:@std/io@0.223": "0.223.0",
@@ -21,15 +25,21 @@
     "jsr:@std/path@1.0.0-rc.1": "1.0.0-rc.1",
     "jsr:@std/path@^1.0.8": "1.0.8",
     "jsr:@std/path@~0.225.2": "0.225.2",
+    "jsr:@std/streams@^1.0.9": "1.0.9",
     "jsr:@std/testing@^1.0.9": "1.0.9",
     "jsr:@ts-morph/bootstrap@0.24": "0.24.0",
     "jsr:@ts-morph/common@0.24": "0.24.0",
     "npm:@aws-sdk/s3-request-presigner@*": "3.744.0",
+    "npm:@aws-sdk/s3-request-presigner@^3.744.0": "3.744.0",
     "npm:@smithy/types@*": "4.1.0",
+    "npm:@smithy/types@^4.1.0": "4.1.0",
     "npm:@types/node@*": "22.5.4",
     "npm:aws4@*": "1.13.2",
+    "npm:aws4@^1.13.2": "1.13.2",
     "npm:ipfs-car@*": "2.0.0",
-    "npm:multiformats@*": "13.3.2"
+    "npm:ipfs-car@2": "2.0.0",
+    "npm:multiformats@*": "13.3.2",
+    "npm:multiformats@^13.3.2": "13.3.2"
   },
   "jsr": {
     "@david/code-block-writer@13.0.3": {
@@ -70,6 +80,15 @@
     "@std/bytes@0.223.0": {
       "integrity": "84b75052cd8680942c397c2631318772b295019098f40aac5c36cead4cba51a8"
     },
+    "@std/bytes@1.0.5": {
+      "integrity": "4465dd739d7963d964c809202ebea6d5c6b8e3829ef25c6a224290fbb8a1021e"
+    },
+    "@std/data-structures@1.0.6": {
+      "integrity": "76a7fd8080c66604c0496220a791860492ab21a04a63a969c0b9a0609bbbb760"
+    },
+    "@std/dotenv@0.225.3": {
+      "integrity": "a95e5b812c27b0854c52acbae215856d9cce9d4bbf774d938c51d212711e8d4a"
+    },
     "@std/fmt@0.223.0": {
       "integrity": "6deb37794127dfc7d7bded2586b9fc6f5d50e62a8134846608baf71ffc1a5208"
     },
@@ -98,7 +117,7 @@
       "integrity": "2d8c3c2ab3a515619b90da2c6ff5ea7b75a94383259ef4d02116b228393f84f1",
       "dependencies": [
         "jsr:@std/assert@0.223",
-        "jsr:@std/bytes"
+        "jsr:@std/bytes@0.223"
       ]
     },
     "@std/path@0.223.0": {
@@ -119,11 +138,20 @@
     "@std/path@1.0.8": {
       "integrity": "548fa456bb6a04d3c1a1e7477986b6cffbce95102d0bb447c67c4ee70e0364be"
     },
+    "@std/streams@1.0.9": {
+      "integrity": "a9d26b1988cdd7aa7b1f4b51e1c36c1557f3f252880fa6cc5b9f37078b1a5035",
+      "dependencies": [
+        "jsr:@std/bytes@^1.0.5"
+      ]
+    },
     "@std/testing@1.0.9": {
       "integrity": "9bdd4ac07cb13e7594ac30e90f6ceef7254ac83a9aeaa089be0008f33aab5cd4",
       "dependencies": [
         "jsr:@std/assert@^1.0.10",
-        "jsr:@std/internal"
+        "jsr:@std/data-structures",
+        "jsr:@std/fs@^1.0.9",
+        "jsr:@std/internal",
+        "jsr:@std/path@^1.0.8"
       ]
     },
     "@ts-morph/bootstrap@0.24.0": {
@@ -819,6 +847,7 @@
       "jsr:@deno/dnt@~0.41.3",
       "jsr:@std/assert@^1.0.11",
       "jsr:@std/dotenv@~0.225.3",
+      "jsr:@std/streams@^1.0.9",
       "jsr:@std/testing@^1.0.9",
       "npm:@aws-sdk/s3-request-presigner@^3.744.0",
       "npm:@smithy/types@^4.1.0",
