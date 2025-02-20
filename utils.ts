@@ -1,8 +1,8 @@
 import { FILEBASE_API_URL } from './constants.ts'
-import aws4 from 'npm:aws4'
+import aws4 from 'aws4'
 import { Buffer } from 'node:buffer'
 import type { RequiredArgs } from './types.ts'
-import type { AwsCredentialIdentity, HttpRequest as IHttpRequest, QueryParameterBag } from 'npm:@smithy/types'
+import type { AwsCredentialIdentity, HttpRequest as IHttpRequest, QueryParameterBag } from '@smithy/types'
 
 export const parseUrl = (
   url: string | URL,

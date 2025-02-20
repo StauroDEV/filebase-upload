@@ -1,5 +1,5 @@
-import { CAREncoderStream, createFileEncoderStream } from 'npm:ipfs-car'
-import { CID } from 'npm:multiformats'
+import { CAREncoderStream, createFileEncoderStream } from 'ipfs-car'
+import { CID } from 'multiformats'
 import { describe, it } from '@std/testing/bdd'
 import { getObject, uploadCar } from './mod.ts'
 import { assertEquals } from '@std/assert/equals'

@@ -1,7 +1,7 @@
 import { uploadCar } from './mod.ts'
 import { load } from '@std/dotenv'
-import { CAREncoderStream, createFileEncoderStream } from 'npm:ipfs-car'
-import { CID } from 'npm:multiformats'
+import { CAREncoderStream, createFileEncoderStream } from 'ipfs-car'
+import { CID } from 'multiformats'
 
 const env = await load()
 

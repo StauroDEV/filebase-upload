@@ -1,9 +1,9 @@
 import { FILEBASE_API_URL } from './constants.ts'
-import type { ChecksumConstructor, HeaderBag, HttpRequest as IHttpRequest, QueryParameterBag } from 'npm:@smithy/types'
+import type { ChecksumConstructor, HeaderBag, HttpRequest as IHttpRequest, QueryParameterBag } from '@smithy/types'
 
-import type aws4 from 'npm:aws4'
+import type aws4 from 'aws4'
 import { createHash, createHmac, type Hash as NodeHash, type Hmac } from 'node:crypto'
-import { S3RequestPresigner } from 'npm:@aws-sdk/s3-request-presigner'
+import { S3RequestPresigner } from '@aws-sdk/s3-request-presigner'
 import type { RequiredArgs } from './types.ts'
 
 import {
