@@ -8,8 +8,16 @@ Minimal library to upload files on [Filebase](https://filebase.com) S3 API. Part
 
 ## Install
 
+For Node.js:
+
 ```sh
 pnpm i @stauro/filebase-upload
+```
+
+For Deno:
+
+```sh
+deno add jsr:@stauro/filebase-upload
 ```
 
 ## Usage
@@ -51,8 +59,8 @@ node --env-file=.env main.js
 ### Deno
 
 ```ts
-import { createPresignedUrl } from 'https://deno.land/x/filebase_upload/mod.ts'
-import { load } from 'https://deno.land/std@0.207.0/dotenv/mod.ts'
+import { createPresignedUrl } from '@stauro/filebase-upload'
+import { load } from '@std/dotenv'
 
 const env = await load()
 

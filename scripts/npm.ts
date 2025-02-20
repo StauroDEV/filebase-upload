@@ -1,5 +1,5 @@
 // ex. scripts/build_npm.ts
-import { build, emptyDir } from 'https://deno.land/x/dnt@0.39.0/mod.ts'
+import { build, emptyDir } from '@deno/dnt'
 
 await emptyDir('./npm')
 
@@ -32,6 +32,11 @@ await build({
     },
     publishConfig: {
       access: 'public',
+    },
+    dependencies: {
+      '@aws-sdk/s3-request-presigner': '^3.744.0',
+      '@smithy/types': '^4.1.0',
+      'aws4': '^1.13.2',
     },
   },
   postBuild() {
