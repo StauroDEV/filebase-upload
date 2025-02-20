@@ -32,7 +32,6 @@ jobs:
         with:
           node-version: '20.x'
           registry-url: 'https://registry.npmjs.org'
-          cache: 'pnpm'
       - name: Run tests
         run: deno test --coverage=coverage --allow-net --allow-env
         env:
