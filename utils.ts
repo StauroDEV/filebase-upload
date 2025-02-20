@@ -1,6 +1,8 @@
 import { FILEBASE_API_URL } from './constants.ts'
-import { aws4, AwsCredentialIdentity, Buffer, IHttpRequest, QueryParameterBag } from './deps.ts'
+import aws4 from 'npm:aws4'
+import { Buffer } from 'node:buffer'
 import { RequiredArgs } from './types.ts'
+import type { AwsCredentialIdentity, HttpRequest as IHttpRequest, QueryParameterBag } from 'npm:@smithy/types'
 
 export const parseUrl = (
   url: string | URL,
@@ -79,7 +81,7 @@ export const buildQueryString = (query: QueryParameterBag): string => {
 
 export const castSourceData = (
   toCast: string | Buffer | ArrayBuffer,
-  encoding?: BufferEncoding,
+  encoding?: NodeJS.BufferEncoding,
 ): Buffer => {
   if (Buffer.isBuffer(toCast)) {
     return toCast
@@ -127,8 +129,8 @@ export const formatUrl = (
   return `${protocol}//${auth}${hostname}${path}${queryString}${fragment}`
 }
 
-export const fromEnv = (filebaseToken: string): () => Promise<AwsCredentialIdentity> => {
-  return async () => {
+export const fromEnv = (filebaseToken: string): () => AwsCredentialIdentity => {
+  return () => {
     const [accessKeyId, secretAccessKey] = atob(filebaseToken).split(':')
     if (!accessKeyId || !secretAccessKey) {
       throw new Error('Missing access key ID and secret access key')

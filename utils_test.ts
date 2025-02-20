@@ -1,4 +1,5 @@
-import { assertEquals, assertThrows, describe, it } from './dev_deps.ts'
+import { describe, it } from '@std/testing/bdd'
+import { assertEquals, assertThrows } from '@std/assert'
 import { parseUrl, toUint8Array } from './utils.ts'
 
 describe('parseUrl', () => {
