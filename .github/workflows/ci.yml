@@ -8,11 +8,19 @@ on:
   pull_request:
     branches: [master]
 
+env:
+  DENO_DIR: $HOME/.deno
+
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Cache Deno dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.DENO_DIR }}
+          key: ${{ hashFiles('deno.lock') }}
       - uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x
@@ -24,6 +32,7 @@ jobs:
         with:
           node-version: '20.x'
           registry-url: 'https://registry.npmjs.org'
+          cache: 'pnpm'
       - name: Run tests
         run: deno test --coverage=coverage --allow-net --allow-env
         env:

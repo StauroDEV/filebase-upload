@@ -13,6 +13,11 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v4
+      - name: Cache Deno dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.DENO_DIR }}
+          key: ${{ hashFiles('deno.lock') }}
       - uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x
@@ -28,6 +33,7 @@ jobs:
         with:
           node-version: '20.x'
           registry-url: 'https://registry.npmjs.org'
+          cache: 'pnpm'
       - name: npm build
         run: deno run -A ./scripts/npm.ts ${{steps.get_tag_version.outputs.TAG_VERSION}}
         env:
