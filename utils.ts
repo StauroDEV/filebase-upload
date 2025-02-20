@@ -1,7 +1,7 @@
 import { FILEBASE_API_URL } from './constants.ts'
 import aws4 from 'npm:aws4'
 import { Buffer } from 'node:buffer'
-import { RequiredArgs } from './types.ts'
+import type { RequiredArgs } from './types.ts'
 import type { AwsCredentialIdentity, HttpRequest as IHttpRequest, QueryParameterBag } from 'npm:@smithy/types'
 
 export const parseUrl = (
@@ -83,9 +83,7 @@ export const castSourceData = (
   toCast: string | Buffer | ArrayBuffer,
   encoding?: NodeJS.BufferEncoding,
 ): Buffer => {
-  if (Buffer.isBuffer(toCast)) {
-    return toCast
-  }
+  if (Buffer.isBuffer(toCast)) return toCast
 
   if (typeof toCast === 'string') {
     return Buffer.from(toCast, encoding)

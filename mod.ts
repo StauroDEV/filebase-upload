@@ -1,10 +1,10 @@
 import { FILEBASE_API_URL } from './constants.ts'
 import type { ChecksumConstructor, HeaderBag, HttpRequest as IHttpRequest, QueryParameterBag } from 'npm:@smithy/types'
 
-import aws4 from 'npm:aws4'
-import { createHash, createHmac, Hash as NodeHash, type Hmac } from 'node:crypto'
+import type aws4 from 'npm:aws4'
+import { createHash, createHmac, type Hash as NodeHash, type Hmac } from 'node:crypto'
 import { S3RequestPresigner } from 'npm:@aws-sdk/s3-request-presigner'
-import { RequiredArgs } from './types.ts'
+import type { RequiredArgs } from './types.ts'
 
 import {
   castSourceData,
@@ -76,7 +76,7 @@ export const createPresignedUrl = async (
   { bucketName, apiUrl, file, token }: {
     file: File
   } & RequiredArgs,
-) => {
+): Promise<string> => {
   await createBucket({ bucketName, apiUrl, token })
   const url = parseUrl(`https://${apiUrl ?? FILEBASE_API_URL}/${bucketName}/${file.name}`)
   const presigner = new S3RequestPresigner({
@@ -92,7 +92,7 @@ export const createPresignedUrl = async (
   return formatUrl(signedUrlObject)
 }
 
-export const uploadCar = async ({ file, ...args }: RequiredArgs & { file: File }) => {
+export const uploadCar = async ({ file, ...args }: RequiredArgs & { file: File }): Promise<Response> => {
   const url = await createPresignedUrl({ ...args, file })
 
   const res = await fetch(decodeURIComponent(url), {
@@ -133,7 +133,7 @@ export const getObject = async (
   { bucketName, filename, apiUrl, token }: RequiredArgs & {
     filename: string
   },
-) => {
+): Promise<Response> => {
   let requestOptions: aws4.Request & { key?: string } = {
     host: `${bucketName}.${apiUrl ?? FILEBASE_API_URL}`,
     path: `/${filename}`,
