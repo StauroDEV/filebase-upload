@@ -16,11 +16,6 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v4
-      - name: Cache Deno dependencies
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.DENO_DIR }}
-          key: ${{ hashFiles('deno.lock') }}
       - uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x
@@ -42,7 +37,7 @@ jobs:
           FILEBASE_TOKEN: ${{ secrets.FILEBASE_TOKEN }}
       - name: Publish to JSR
         if: startsWith(github.ref, 'refs/tags/')
-        run: deno publish --set-version ${{steps.get_tag_version.outputs.TAG_VERSION}}
+        run: deno publish --set-version ${{steps.get_tag_version.outputs.TAG_VERSION}} --allow-dirty
       - name: Publish to NPM
         if: startsWith(github.ref, 'refs/tags/')
         env:
