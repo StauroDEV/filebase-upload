@@ -5,6 +5,9 @@ on:
     tags:
         - '*'
 
+env:
+  DENO_DIR: $HOME/.deno
+
 jobs:
   test:
     runs-on: ubuntu-latest
