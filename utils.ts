@@ -2,6 +2,8 @@ import { FILEBASE_API_URL } from './constants.ts'
 import aws4 from 'aws4'
 import { Buffer } from 'node:buffer'
 import type { RequiredArgs } from './types.ts'
+
+import { createHash, createHmac } from 'node:crypto'
 import type { AwsCredentialIdentity, HttpRequest as IHttpRequest, QueryParameterBag } from '@smithy/types'
 
 export const parseUrl = (
@@ -155,4 +157,80 @@ export const createBucket = async (
   requestOptions = generateFilebaseRequestOptions(token, requestOptions)
   return await fetch(`https://${requestOptions.host}/`, requestOptions as RequestInit)
     .then((res) => res.status == 200)
+}
+
+const sign = (key: Uint8Array | string, msg: string): Uint8Array =>
+  new Uint8Array(createHmac('sha256', key).update(msg).digest())
+
+function getSignatureKey(secretKey: string, date: string, region: string, service: string): Uint8Array {
+  const kDate = sign(`AWS4${secretKey}`, date)
+  const kRegion = sign(kDate, region)
+  const kService = sign(kRegion, service)
+  return sign(kService, 'aws4_request')
+}
+
+export function presignRequest(
+  request: IHttpRequest,
+  {
+    accessKeyId,
+    secretAccessKey,
+    region,
+    expiresIn = 3600,
+  }: {
+    accessKeyId: string
+    secretAccessKey: string
+    region: string
+    expiresIn?: number
+  },
+): IHttpRequest {
+  const method = request.method.toUpperCase()
+  const host = request.hostname
+  const now = new Date()
+  const amzDate = now.toISOString().replace(/[:-]|\.\d{3}/g, '')
+  const dateStamp = amzDate.slice(0, 8)
+
+  const credentialScope = `${dateStamp}/${region}/s3/aws4_request`
+  const credential = `${accessKeyId}/${credentialScope}`
+
+  const signedHeaders = 'host'
+  const query: Record<string, string> = {
+    'X-Amz-Algorithm': 'AWS4-HMAC-SHA256',
+    'X-Amz-Credential': credential,
+    'X-Amz-Date': amzDate,
+    'X-Amz-Expires': String(expiresIn),
+    'X-Amz-SignedHeaders': signedHeaders,
+  }
+
+  const canonicalQuery = Object.entries(query)
+    .sort()
+    .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
+    .join('&')
+
+  const canonicalRequest = [
+    method,
+    request.path,
+    canonicalQuery,
+    `host:${host}`,
+    '',
+    signedHeaders,
+    'UNSIGNED-PAYLOAD',
+  ].join('\n')
+
+  const stringToSign = [
+    'AWS4-HMAC-SHA256',
+    amzDate,
+    credentialScope,
+    createHash('sha256').update(canonicalRequest).digest('hex'),
+  ].join('\n')
+
+  const signingKey = getSignatureKey(secretAccessKey, dateStamp, region, 's3')
+  const signature = createHmac('sha256', signingKey).update(stringToSign).digest('hex')
+
+  return {
+    ...request,
+    query: {
+      ...query,
+      'X-Amz-Signature': signature,
+    },
+  }
 }
