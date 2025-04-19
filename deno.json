@@ -19,7 +19,7 @@
     "multiformats": "npm:multiformats@^13.3.2"
   },
   "name": "@stauro/filebase-upload",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "Apache-2.0",
   "exports": "./mod.ts",
   "publish": {
