@@ -1,9 +1,8 @@
 import { FILEBASE_API_URL } from './constants.ts'
-import type { ChecksumConstructor, HeaderBag, HttpRequest as IHttpRequest, QueryParameterBag } from '@smithy/types'
+import type { HeaderBag, HttpRequest as IHttpRequest, QueryParameterBag } from '@smithy/types'
 
 import type aws4 from 'aws4'
 import { createHash, createHmac, type Hash as NodeHash, type Hmac } from 'node:crypto'
-import { S3RequestPresigner } from '@aws-sdk/s3-request-presigner'
 import type { RequiredArgs } from './types.ts'
 
 import {
@@ -13,6 +12,7 @@ import {
   fromEnv,
   generateFilebaseRequestOptions,
   parseUrl,
+  presignRequest,
   toUint8Array,
 } from './utils.ts'
 
@@ -32,7 +32,7 @@ export class HashImpl {
   }
 
   digest(): Promise<Uint8Array> {
-    return Promise.resolve(this.#hash.digest())
+    return Promise.resolve(new Uint8Array(this.#hash.digest()))
   }
 
   reset(): void {
@@ -79,17 +79,18 @@ export const createPresignedUrl = async (
 ): Promise<string> => {
   await createBucket({ bucketName, apiUrl, token })
   const url = parseUrl(`https://${apiUrl ?? FILEBASE_API_URL}/${bucketName}/${file.name}`)
-  const presigner = new S3RequestPresigner({
-    credentials: fromEnv(token)(),
-    region: 'us-east-1',
-    sha256: HashImpl.bind(null, 'sha256') as unknown as ChecksumConstructor,
-  })
+  const { accessKeyId, secretAccessKey } = fromEnv(token)()
 
-  const signedUrlObject = await presigner.presign(
+  const signedRequest = presignRequest(
     new HttpRequest({ ...url, method: 'PUT', headers: {} }),
-    { expiresIn: 3600 },
+    {
+      accessKeyId,
+      secretAccessKey,
+      region: 'us-east-1',
+      expiresIn: 3600,
+    },
   )
-  return formatUrl(signedUrlObject)
+  return formatUrl(signedRequest)
 }
 
 export const uploadCar = async ({ file, ...args }: RequiredArgs & { file: File }): Promise<Response> => {

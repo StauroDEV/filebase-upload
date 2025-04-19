@@ -1,6 +1,8 @@
 import { describe, it } from '@std/testing/bdd'
 import { assertEquals, assertThrows } from '@std/assert'
-import { parseUrl, toUint8Array } from './utils.ts'
+import { parseUrl, presignRequest, toUint8Array } from './utils.ts'
+import type { HttpRequest } from '@smithy/types'
+import { assertObjectMatch } from '@std/assert/object-match'
 
 describe('parseUrl', () => {
   describe('should return the correct parsed URL', () => {
@@ -37,5 +39,42 @@ describe('toUint8Array', () => {
     const buffer = new ArrayBuffer(8)
     const uint8Array = toUint8Array(buffer)
     assertEquals(uint8Array, new Uint8Array(buffer))
+  })
+})
+
+describe('presignRequest', () => {
+  it('should return a signed request', () => {
+    const request: HttpRequest = {
+      method: 'GET',
+      hostname: 'example.com',
+      path: '/path',
+      query: {},
+      headers: {},
+      username: '',
+      password: '',
+      fragment: '',
+      protocol: 'https:',
+    }
+    const signedRequest = presignRequest(request, {
+      accessKeyId: 'AKIAIOSFODNN7EXAMPLE',
+      secretAccessKey: 'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY',
+      region: 'us-east-1',
+      expiresIn: 3600,
+    })
+
+    const now = new Date()
+    const amzDate = now.toISOString().replace(/[:-]|\.\d{3}/g, '')
+
+    assertEquals(signedRequest.method, 'GET')
+    assertEquals(signedRequest.hostname, 'example.com')
+    assertEquals(signedRequest.path, '/path')
+    assertObjectMatch(signedRequest.query!, {
+      'X-Amz-Algorithm': 'AWS4-HMAC-SHA256',
+      'X-Amz-Credential': 'AKIAIOSFODNN7EXAMPLE/20250419/us-east-1/s3/aws4_request',
+      'X-Amz-Date': amzDate,
+      'X-Amz-Expires': '3600',
+      'X-Amz-SignedHeaders': 'host',
+    })
+    assertEquals(signedRequest.headers, {})
   })
 })

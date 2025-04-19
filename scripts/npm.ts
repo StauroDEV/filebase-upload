@@ -34,7 +34,6 @@ await build({
       access: 'public',
     },
     dependencies: {
-      '@aws-sdk/s3-request-presigner': '^3.744.0',
       '@smithy/types': '^4.1.0',
       'aws4': '^1.13.2',
     },
