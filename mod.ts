@@ -2,45 +2,16 @@ import { FILEBASE_API_URL } from './constants.ts'
 import type { HeaderBag, HttpRequest as IHttpRequest, QueryParameterBag } from '@smithy/types'
 
 import type aws4 from 'aws4'
-import { createHash, createHmac, type Hash as NodeHash, type Hmac } from 'node:crypto'
 import type { RequiredArgs } from './types.ts'
 
 import {
-  castSourceData,
   createBucket,
   formatUrl,
   fromEnv,
   generateFilebaseRequestOptions,
   parseUrl,
-  presignRequest,
-  toUint8Array,
+  presignRequest
 } from './utils.ts'
-
-export class HashImpl {
-  #algorithmIdentifier: string
-  #secret?
-  #hash!: NodeHash | Hmac
-
-  constructor(algorithmIdentifier: string, secret?: string) {
-    this.#algorithmIdentifier = algorithmIdentifier
-    this.#secret = secret
-    this.reset()
-  }
-
-  update(toHash: string, encoding?: 'utf8' | 'ascii' | 'latin1'): void {
-    this.#hash.update(toUint8Array(castSourceData(toHash, encoding)))
-  }
-
-  digest(): Promise<Uint8Array> {
-    return Promise.resolve(new Uint8Array(this.#hash.digest()))
-  }
-
-  reset(): void {
-    this.#hash = this.#secret
-      ? createHmac(this.#algorithmIdentifier, castSourceData(this.#secret))
-      : createHash(this.#algorithmIdentifier)
-  }
-}
 
 class HttpRequest {
   method: string

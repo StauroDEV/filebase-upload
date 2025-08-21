@@ -4,7 +4,6 @@ import { describe, it } from '@std/testing/bdd'
 import { getObject, uploadCar } from './mod.ts'
 import { assertEquals } from '@std/assert/equals'
 import { assertStringIncludes } from '@std/assert/string-includes'
-import { toBlob } from '@std/streams/to-blob'
 
 const placeholderCID = CID.parse('bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi')
 
@@ -44,7 +43,7 @@ describe('uploadCar', { sanitizeResources: false }, () => {
       const stream = createFileEncoderStream(new Blob(['Hello ipfs-car!']))
         .pipeThrough(new CAREncoderStream([placeholderCID]))
 
-      const file = new File([await toBlob(stream)], 'file.car')
+      const file = new File([await new Response(stream).blob()], 'file.car')
 
       const res = await uploadCar({ bucketName: 'filebase-upload-tests', token: Deno.env.get('FILEBASE_TOKEN')!, file })
       assertEquals(res.headers.get('x-amz-meta-cid'), 'bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi')
