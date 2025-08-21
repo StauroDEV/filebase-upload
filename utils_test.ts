@@ -64,13 +64,14 @@ describe('presignRequest', () => {
 
     const now = new Date()
     const amzDate = now.toISOString().replace(/[:-]|\.\d{3}/g, '')
+    const amzShortDate = amzDate.slice(0, 8)
 
     assertEquals(signedRequest.method, 'GET')
     assertEquals(signedRequest.hostname, 'example.com')
     assertEquals(signedRequest.path, '/path')
     assertObjectMatch(signedRequest.query!, {
       'X-Amz-Algorithm': 'AWS4-HMAC-SHA256',
-      'X-Amz-Credential': 'AKIAIOSFODNN7EXAMPLE/20250419/us-east-1/s3/aws4_request',
+      'X-Amz-Credential': `AKIAIOSFODNN7EXAMPLE/${amzShortDate}/us-east-1/s3/aws4_request`,
       'X-Amz-Date': amzDate,
       'X-Amz-Expires': '3600',
       'X-Amz-SignedHeaders': 'host',
