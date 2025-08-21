@@ -21,7 +21,7 @@ await build({
     license: 'Apache-2.0',
     repository: {
       type: 'git',
-      url: 'git+https://github.com/stauroDEV/filebase-upload.git',
+      url: 'https://github.com/StauroDEV/filebase-upload',
     },
     bugs: {
       url: 'https://github.com/stauroDEV/filebase-upload/issues',
