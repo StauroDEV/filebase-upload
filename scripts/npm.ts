@@ -34,7 +34,7 @@ await build({
       access: 'public',
     },
     dependencies: {
-      '@smithy/types': '^4.1.0',
+      '@smithy/types': '^4.3.2',
       'aws4': '^1.13.2',
     },
   },
