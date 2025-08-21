@@ -1,7 +1,7 @@
 import { CAREncoderStream, createFileEncoderStream } from 'ipfs-car'
 import { CID } from 'multiformats'
 import { describe, it } from '@std/testing/bdd'
-import { getObject, uploadCar, headObject } from './mod.ts'
+import { getObject, headObject, uploadCar } from './mod.ts'
 import { assertEquals } from '@std/assert/equals'
 import { assertStringIncludes } from '@std/assert/string-includes'
 

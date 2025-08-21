@@ -1,6 +1,6 @@
 import { describe, it } from '@std/testing/bdd'
 import { assertEquals, assertThrows } from '@std/assert'
-import { parseUrl, presignRequest, toUint8Array } from './utils.ts'
+import { generateFilebaseRequestOptions, parseUrl, presignRequest, toUint8Array } from './utils.ts'
 import type { HttpRequest } from '@smithy/types'
 import { assertObjectMatch } from '@std/assert/object-match'
 
@@ -77,5 +77,11 @@ describe('presignRequest', () => {
       'X-Amz-SignedHeaders': 'host',
     })
     assertEquals(signedRequest.headers, {})
+  })
+})
+
+describe('generateFilebaseRequestOptions', () => {
+  it('should throw if no token is provided', () => {
+    assertThrows(() => generateFilebaseRequestOptions('lol', {}))
   })
 })
