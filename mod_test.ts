@@ -1,7 +1,7 @@
 import { CAREncoderStream, createFileEncoderStream } from 'ipfs-car'
 import { CID } from 'multiformats'
 import { describe, it } from '@std/testing/bdd'
-import { getObject, uploadCar } from './mod.ts'
+import { getObject, uploadCar, headObject } from './mod.ts'
 import { assertEquals } from '@std/assert/equals'
 import { assertStringIncludes } from '@std/assert/string-includes'
 
@@ -33,6 +33,18 @@ describe('getObject', () => {
         assertStringIncludes(((error as Error).cause as URL).hostname, 'filebase-upload-tests.stauro.dev')
       } else assertStringIncludes((error as Error).message, 'filebase-upload-tests.stauro.dev')
     }
+  })
+})
+
+describe('headObject', () => {
+  it('should return whether the file is uploaded and give its CID', async () => {
+    const [isUploaded, cid] = await headObject({
+      bucketName: 'filebase-upload-tests',
+      token: Deno.env.get('FILEBASE_TOKEN')!,
+      filename: 'hello.txt',
+    })
+    assertEquals(isUploaded, true)
+    assertEquals(cid, 'QmNRCQWfgze6AbBCaT1rkrkV5tJ2aP4oTNPb5JZcXYywve')
   })
 })
 
