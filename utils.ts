@@ -81,23 +81,6 @@ export const buildQueryString = (query: QueryParameterBag): string => {
   return parts.join('&')
 }
 
-export const castSourceData = (
-  toCast: string | Buffer | ArrayBuffer,
-  encoding?: NodeJS.BufferEncoding,
-): Buffer => {
-  if (Buffer.isBuffer(toCast)) return toCast
-
-  if (typeof toCast === 'string') {
-    return Buffer.from(toCast, encoding)
-  }
-
-  if (ArrayBuffer.isView(toCast)) {
-    return Buffer.from(toCast.buffer, toCast.byteOffset, toCast.byteLength)
-  }
-
-  return Buffer.from(toCast)
-}
-
 export const formatUrl = (
   request: Omit<IHttpRequest, 'headers' | 'method'>,
 ): string => {
