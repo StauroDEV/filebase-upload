@@ -34,25 +34,6 @@ export const generateFilebaseRequestOptions = (
   return requestOptions
 }
 
-const te = new TextEncoder()
-
-export const toUint8Array = (
-  data: string | ArrayBuffer | ArrayBufferView,
-): Uint8Array => {
-  if (typeof data === 'string') {
-    return te.encode(data)
-  }
-
-  if (ArrayBuffer.isView(data)) {
-    return new Uint8Array(
-      data.buffer,
-      data.byteOffset,
-      data.byteLength / Uint8Array.BYTES_PER_ELEMENT,
-    )
-  }
-
-  return new Uint8Array(data)
-}
 const hexEncode = (c: string) => `%${c.charCodeAt(0).toString(16).toUpperCase()}`
 
 const escapeUri = (uri: string): string =>

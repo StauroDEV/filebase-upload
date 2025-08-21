@@ -1,6 +1,6 @@
 import { describe, it } from '@std/testing/bdd'
 import { assertEquals, assertThrows } from '@std/assert'
-import { generateFilebaseRequestOptions, parseUrl, presignRequest, toUint8Array } from './utils.ts'
+import { generateFilebaseRequestOptions, parseUrl, presignRequest } from './utils.ts'
 import type { HttpRequest } from '@smithy/types'
 import { assertObjectMatch } from '@std/assert/object-match'
 
@@ -24,21 +24,6 @@ describe('parseUrl', () => {
     assertThrows(() => {
       parseUrl(url)
     })
-  })
-})
-
-const te = new TextEncoder()
-
-describe('toUint8Array', () => {
-  it('should convert a UTF-8 string to Uint8Array', () => {
-    const input = 'Hello, World!'
-    const uint8Array = toUint8Array(input)
-    assertEquals(uint8Array, te.encode(input))
-  })
-  it('should convert an ArrayBuffer to Uint8Array', () => {
-    const buffer = new ArrayBuffer(8)
-    const uint8Array = toUint8Array(buffer)
-    assertEquals(uint8Array, new Uint8Array(buffer))
   })
 })
 
